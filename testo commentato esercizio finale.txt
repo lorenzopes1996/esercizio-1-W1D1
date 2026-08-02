@@ -1,0 +1,80 @@
+Esercizio 1: (importa e pulisci) porta entrambi i file in Power Query. Nel foglio prezzi elimina le righe non valide, promuovi la vera intestazione imposta i tipi (PREZZO MEDIO numero, citta testo); in Strutture ricettive uniforma Citta e Denominazione (spazi e maiuscole/minuscole) e gestisci le celle vuote. il flusso deve restare aggiornabile
+- 
+Ho portato entrambi i file in Power Query, ho eliminato le righe non valide su power query e inserito l'intestazione corretta, lasciando il flusso aggiornabile, ho rimosso le righe completamente vuote, e cancellato la colonna 2 che era vuota 100%. ho anche tagliato, pulito e trasformato in maiuscolo la colonna città.
+su strutture ricettive ho usato la prima riga come intestazione, subito dopo ho tagliato e pulito tutte le colonne. Ho cambiato la profilatura della colonna in base all'intero dataset. e infine ho trasformato in maiuscolo: categoria, DENOMINAZIONE, indirizzo, Località E Città. tutto minuscolo per quanto riguarda indirizzo internet e indirizzo di posta elettronica. ho mantenuto le righe anche con null perchè alcune strutture possono non avere un indirizzo internet o un indirizzo di posta elettronica o una località specifica. mentre per quanto riguarda i null nella colonna "indirizzo" non lo reputo tanto importante da eliminare la riga e perdere, cosi,  una parte di dataset buona. 
+__________________
+Esercizio 2: (arricchisci con un merge) collega ogni struttura al prezzo medio della sua città con un merge sulla chiave città; scegli il tipo di join e motiva cosa succede alle strutture di città senza prezzo.
+-
+ho fatto una left outer join sulle colonne città, tutte le strutture ricettive sono state mantenute e hanno trovato un prezzo medio corrispondente alla città. se fossero presenti strutture di città senza prezzo rimarrebbe la riga "null".
+_______________________________
+Esercizio 3: (aggrega e carica) con Raggruppa calcola il numero di strutture per città e per categoria; rinomina i passaggi applicati e carica il risultato nel modello dati.
+-
+ho usato su Power Query la funziona "raggruppa per", usando le funzioni avanzate ho potuto raggruppare per città e anche per categoria, ricevendo una nuova tabella con il rapporto dei numeri delle strutture tra città e categoria. (LA TABELLA è PRESENTE IN UN DIVERSO FOGLIO RINOMINATO "Raggruppa" così da non modificare il vecchio dataset per i successivi esercizi).
+___________
+Esercizio 4: (maschera di ricerca): completa il foglio RICERCA: menu a tendina in C3 per il NOME STRUTTURA e recupero automatico si Citta, indirizzo, email e indirizzo web; gestisci il caso di struttura non trovata
+- ho aperto il foglio Ricerca e su power query ho rimosso tutte le righe null, ho messo il menu a tendina in B2 con il nome struttura anziché in C3 perché ho rimosso le righe nulle e me lo trovo in B2 ora. E infine ho inserito il recupero automatico di città, indirizzo, email e indirizzo web. e ho rimosso le 2 ultime righe che rimanevano fuori tabella. In caso di struttura non trovata apparirà la medesima dicitura.
+___________
+Esercizio 5: Nelle celle grigie calcola il numero di strutture della regione e il numero di strutture presenti nella città della struttura cercata.
+-
+Ho contato il numero delle strutture con la formula =CONTA.VALORI(Strutture_ricettive[Denominazione]) , successivamente con la formula =CONTA.PIÙ.SE('Strutture ricettive'!D:D; B8) ci dice in C3, in linea con la riga "numero strutture per località" il numero delle strutture presenti in quella città.
+_______________
+Esercizio 6 (classifica e filtra): crea l'elenco delle 15 categorie con il numero di strutture per ciascuna, ordinato dal più alto; poi, dentro una tabella strutturata estrai in un area libera tutte le strutture di una citta a tua scelta, ordinate per categoria.
+-
+ho trovato l'elenco delle 15 categorie attraverso la formula =UNICI(Strutture_ricettive[Categoria]) e =CONTA.SE(Strutture_ricettive[Categoria];F2) per trovare il numero di strutture per categoria. poi con =DATI.ORDINA(F2:G16; 2; -1) ho costruito un altra tabella con dati in ordine decrescente con un istogramma affiancato. Successivamente ho estratto in una area libera tutte le strutture di San Benedetto del Tronto e ordinate per categorie con la formula =DATI.ORDINA(FILTRO(Strutture_ricettive; Strutture_ricettive[Città]="SAN BENEDETTO DEL TRONTO");2;1).
+‑___________
+Esercizio 7: (indici) sui prezzi medi delle città calcola media, mediana e moda, poi varianza, deviazione standard e IQR; Commenta se la distribuzione e simmetrica confrontando media e mediana
+-
+Ho calcolato media, mediana, moda, varianza, deviazione standard e infine q1 e q2 per ottenere l'IQR. la distribuzione è simmetrica in quanto moda e mediana sono uguali e i quartili, per un double check, sono quasi equidistanti dalla mediana.
+_________________
+Esercizio 8: (distribuzione) costruisci una tabella di frequenza dei prezzi per classi (ampiezza a tua scelta, es. 20 euro) e individua la classe modale
+-
+ho costruito una tabella di frequenza con ampiezza 20 euro. la formula che ho utilizzato è: =FREQUENZA(prezzi[PREZZO MEDIO];L5:L11).
+_______________
+Esercizio 9: (outlier) con la regola dell'IQR e i limiti di Tukey individua le città con prezzo anomalo; ricalcola la deviazione standard senza gli outlier e commenta quanto cambia.
+-
+un prezzo possiamo definirlo anomalo se è minore di -19,87 e maggiore di 167,12.								
+Applicando la regola del IQR e i limiti di Tukey non emergono outlier, nessun prezzo supera 167,12€ di conseguenza la dev. Stand. Calcolata rimane invariata.								
+La variabilità dei prezzi non è influenzata da valori anomali.								
+________
+esercizio 10 (probabilità e conteggi) estraendo a caso una struttura, qual è la probabilità che sia un ALBERGO? E un B&B? estraendone due indipendenti, qual è la probabilità siano entrambi alberghi?
+-
+Ho calcolato sul foglio "Ricerca" il totale delle strutture, dei B&B e degli alberghi. successivamente ho diviso il numero di alberghi per il tot. strutture e ho ottenuto la percentuale della probabilità che estraendo a caso una struttura sia un albergo, ho fatto lo stesso per il B&B. mentre per far si che venga estratto 2 volte l'albergo estraendo solo 2 variabili, ho fatto lo stesso calcolo ma portandolo alla 2 (^2).
+______________
+Esercizio 11: regola (69-95-99,7): assumendo i prezzi medi distribuiti normalmente, stima la quota di città con prezzo entro piu o meno 1 e piu o meno 2 deviazioni standard dalla media 
+_
+nel foglio prezzi ho calcolato il limite inferiore e superiore 1 e poi il limite inferiore e superiore 2, e ho stimato la quota delle città che ricadono su entrambi gli intervalli. i risultati sono stati 55% entro +- 1 dev. standard e 100% entro +- 2 dev. standard. questo significa che i prezzi medi sono molto concentrati intorno alla media.
+_____________
+Esercizio 12: (Z-score): calcola lo z-score del prezzo di una città a tua scelta e, con NORM.S.DIST, la probabilità di osservare il prezzo inferiore; interpreta il risultato.
+-
+Ho calcolato sul foglio prezzi lo z-score di San Benedetto del Tronto calcolato mi ha dato 41%, il prezzo si colloca leggermente sopra la media essendo positivo.  Utilizzando la funzione distrib.norm.st.n (non avendo la norm.s.dist) mi è uscito un valore del 66%, ciò significa che il 66% dei prezzi medi delle città è più basso di della città scelta.
+______________
+Esercizio 13: (intervallo di confidenza) trattando le città come un campione, stima il prezzo medio con MEDIA e calcola l'intervallo di confidenza al 95% con CONFIDENZA.NORM; scrivi e interpreta correttamente l'intervallo.
+-
+ho calcolato il numero di valori presenti nella colonna città con il conta.valori, poi ho calcolato il margine di errore con la funzione =confidenza.norm e infine ho calcolato i due limiti e la media rientra perfettamente al suo interno.
+
+______________
+esercizio 14 (effetto di n): calcola l'intervallo anche al 90% e al 99% e confronta l'ampiezza; poi spiega come cambierebbe il margine se la numerosità quadruplicasse
+-
+L'ampiezza dell'intervallo al 90% è la piu stretta, al 95% è intermedia e al 99% è la più ampia questo perché aumentando il livello di confidenza il margine di errore cresce e l'intervallo si allarga.
+mentre quadruplicando il numero di osservazioni abbiamo 936 valori, il margine di errore si dimezza passando da 3,5 a 1,75; di conseguenza l'intervallo di confidenza diventa molto piu stretto. aumentando la numerosità del campione, l'intervallo di confidenza diventa piu preciso e si restringe
+___________
+esercizio 15: confronto tra gruppi: usando i prezzi collegati alle strutture, confronta il prezzo medio delle città con alberghi rispetto a quelle con agriturismi; imposta l'ipotesi nulla e valuta se la differenza è rilevante
+-
+
+___________
+16: correlazione: metti in relazione per ogni città il numero di strutture (dal raggruppa) e il prezzo medio ; calcola covarianza e coefficiente di correlazione e commenta segno e intensità del legame.
+-
+Ho usato raggruppa per su power query nella tabella "strutture ricettive (3) e di seguito ho aggiunto una colonna a destra e ho fatto una merge left ouer per ottenere i prezzi medi in corrispondenza delle città e accorparli alla tabella strutture ricettive (3) per avere tutto insieme con un altra merge (sul foglio Merge1), ho ottenuto la covarianza con la formula =COVARIANZA.C e la correlazione con =CORRELAZIONE. 
+La covarianza è pari a -3,8, significa che quando aumenta il numero di strutture il prezzo medio tende leggermente a diminuire; mentre la correlazione è di -0,05, questo valore è quasi zero confermando un legame debole tra le due variabili. quindi il numero di strutture presenti non mostra un legame significativo con il prezzo medio delle strutture
+__________________________________
+17:(regressione) crea il diagramma di dispersione con linea di tendenza (equazione e R quadro) poi esegui la regressione con il toolpak e leggi r quadrom p-value e significatività F
+-
+Ho disegnato il diagramma di dispersione, facendo emergere R quadro e l'equazione del grafico. poi con analisi dati ho inserito un output riepilogo con la regressione e per commentare i risultati possiamo dire il grafico di dispersione mostra una pendenza quasi nulla e un valore di R quadro = 0,003, la regressione conferma questo risultato: coefficiente della variabile = 0,51, p-value =0,497 quindi non significativo. anche la significatività F = 0,497 è superiore alla soglia del 5%. possiamo dire che non esiste una relazione lineare rilevante tra numero strutture e prezzo.
+___________________________________
+18: previsione e limiti) usa il modello per stimare il prezzo medio di una città cin un dato numero di strutture; indica un limite della previsione (estrapolazione oltre i dati, correlazione diversa da casualità)
+-
+Utilizzando l’equazione della regressione Y=76,296−0,513𝑋, ho stimato il prezzo medio per una città con 11 strutture: il modello prevede circa 70,7 €, mentre il valore reale è 85 €. La previsione è poco affidabile perché il modello non è significativo
+
+
+ 
+
